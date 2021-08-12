@@ -119,11 +119,11 @@ class Spotify extends erela_js_1.Plugin {
     getAlbumTracks(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const album = yield this.makeRequest(`${BASE_URL}/albums/${id}`);
-            const tracks = album.tracks.items.filter((e) => this.filterNullOrUndefined(e)).map(item => Spotify.convertToUnresolved(item));
+            const tracks = album.tracks.items.filter(this.filterNullOrUndefined).map(item => Spotify.convertToUnresolved(item));
             let next = album.tracks.next, page = 1;
             while (next && !this.options.playlistLimit ? true : page < this.options.albumLimit) {
                 const nextPage = yield this.makeRequest(next);
-                tracks.push(...nextPage.items.filter((e) => this.filterNullOrUndefined(e)).map(item => Spotify.convertToUnresolved(item)));
+                tracks.push(...nextPage.items.filter(this.filterNullOrUndefined).map(item => Spotify.convertToUnresolved(item)));
                 next = nextPage.next;
                 page++;
             }
@@ -133,11 +133,11 @@ class Spotify extends erela_js_1.Plugin {
     getPlaylistTracks(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const playlist = yield this.makeRequest(`${BASE_URL}/playlists/${id}`);
-            const tracks = playlist.tracks.items.filter((e) => this.filterNullOrUndefined(e)).map(item => Spotify.convertToUnresolved(item.track));
+            const tracks = playlist.tracks.items.filter(this.filterNullOrUndefined).map(item => Spotify.convertToUnresolved(item.track));
             let next = playlist.tracks.next, page = 1;
             while (next && !this.options.playlistLimit ? true : page < this.options.playlistLimit) {
                 const nextPage = yield this.makeRequest(next);
-                tracks.push(...nextPage.items.filter((e) => this.filterNullOrUndefined(e)).map(item => Spotify.convertToUnresolved(item.track)));
+                tracks.push(...nextPage.items.filter(this.filterNullOrUndefined).map(item => Spotify.convertToUnresolved(item.track)));
                 next = nextPage.next;
                 page++;
             }
@@ -189,7 +189,7 @@ class Spotify extends erela_js_1.Plugin {
         });
     }
     filterNullOrUndefined(value) {
-        return value !== undefined || value !== null;
+        return typeof value !== 'undefined' ? value !== null : typeof value !== 'undefined';
     }
 }
 exports.Spotify = Spotify;
